@@ -1,33 +1,15 @@
-import logo from './images/logo.svg';
+import Header from './Header.js';
+import Main from "./Main.js";
+import Footer from './Footer.js';
 
 function App() {
   return ((
     <>
     <div className="page">
-      <header className="header">
-            <img className="logo" src= {logo} alt="around the U.S. logo" />
-        </header>
-        <main className="content">
+      <Header />
+      <Main />
+      <Footer />
 
-<section className="profile">
-    <div className="profile__avatar-container">
-        <img className="profile__avatar" src="#" alt="profile" />
-        <button className="profile__edit-avatar" aria-label="edit-avatar" type="button"></button>
-    </div>
-    <div className="profile__info">
-        <h1 className="profile__name"></h1>
-        <button className="profile__edit-btn" type="button" aria-label="Edit profile"></button>
-        <p className="profile__occupation"></p>
-
-    </div>
-    <button className="profile__add-btn" type="button" aria-label="Add picture"></button>
-</section>
-<section className="cards">
-</section>
-</main>
-<footer className="footer">
-<p className="footer__copyright">© 2020 Around The U.S.</p>
-</footer>
 <div className="popup popup__type_edit-profile">
 <div className="popup__box">
     <button className="popup__close-btn" type="button" aria-label="Close"></button>
