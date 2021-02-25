@@ -1,5 +1,5 @@
 import React from "react";
-import { api } from '../utils/Api.js';
+import { api } from '../utils/api.js';
 import Card from './Card.js';
 
 function Main(props) {
@@ -16,7 +16,7 @@ function Main(props) {
                 setUserAvatar(userData.avatar);
                 return (initialCardList);
             })
-            .then((res) => {               
+            .then((res) => {
                 setCards(res);
             })
             .catch(err => console.log("Error: " + err));
@@ -28,7 +28,7 @@ function Main(props) {
 
                 <section className="profile">
                     <div className="profile__avatar-container">
-                        <img className="profile__avatar" src={userAvatar} alt="profile"/>
+                        <img className="profile__avatar" src={userAvatar} alt="profile" />
                         <button onClick={props.handleEditAvatarClick} className="profile__edit-avatar" aria-label="edit-avatar" type="button"></button>
                     </div>
                     <div className="profile__info">
@@ -40,12 +40,13 @@ function Main(props) {
                     <button onClick={props.handleAddPlaceClick} className="profile__add-btn" type="button" aria-label="Add picture"></button>
                 </section>
                 <section className="cards">
-                    {cards.map((card) => 
-                    <Card card={card} 
-                    key = {card._id}
-                    onCardClick={() => {props.handleCardClick(card)}}
-                    /> 
-                )}
+                    {cards.map((card) => (
+                        <Card card={card}
+                            key={card._id}
+                            onCardClick={() => { props.handleCardClick(card) }}
+                        />
+                    )
+                    )}
                 </section>
             </main>
         )
