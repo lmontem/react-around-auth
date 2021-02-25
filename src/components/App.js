@@ -4,6 +4,8 @@ import Main from "./Main.js";
 import Footer from './Footer.js';
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from './ImagePopup.js';
+import { api } from '../utils/api.js';
+import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 
 function App() {
@@ -12,7 +14,16 @@ function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
     const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState('');
+    const [currentUser,setCurrentUser]= React.useState('');
 
+    React.useEffect(()=>{
+        api.getUserInfo()
+        .then((userData)=>{
+            setCurrentUser(userData);
+        })
+        .catch(err => console.log("Error: " + err));
+    },[])
+   
 
     function handleEditAvatarClick() {
         setEditAvatarPopupOpen(true);
@@ -25,7 +36,6 @@ function App() {
     }
     function handleCardClick(card) {
         setSelectedCard(card);
-
         setImagePopupOpen(true);
     }
     function closeAllPopups() {
@@ -39,6 +49,7 @@ function App() {
     return ((
         <>
             <div className="page">
+                <CurrentUserContext.Provider value= {currentUser}>
                 <Header />
                 <Main
                     handleEditProfileClick={handleEditProfileClick}
@@ -101,6 +112,7 @@ function App() {
                     isOpen={isImagePopupOpen}
                     selectedCard={selectedCard}
                     onClose={closeAllPopups} />
+                    </CurrentUserContext.Provider>
             </div>
         </>
     )

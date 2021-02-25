@@ -1,5 +1,4 @@
 function PopupWithForm(props) {
-    console.log("Children: " + props.children);
     return (
         (
             <div className={`popup popup__type_${props.name} ${props.isOpen ? "popup__opened" : ""}`}>
