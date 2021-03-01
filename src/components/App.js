@@ -7,6 +7,7 @@ import ImagePopup from './ImagePopup.js';
 import { api } from '../utils/api.js';
 import CurrentUserContext from '../contexts/CurrentUserContext.js';
 import EditProfilePopup from './EditProfilePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
 
 
 function App() {
@@ -51,10 +52,23 @@ function App() {
         .then(()=>{
             setCurrentUser({
                 name,
-                about
+                about,
+                avatar: currentUser.avatar
             })
         })
-        .then(()=>setEditProfilePopupOpen(false))
+        .then(()=>closeAllPopups())
+        .catch(err => console.log("Error: " + err));
+    }
+    function handleUpdateAvatar(newAvatar) {
+        api.setAvatar(newAvatar)
+        .then(()=>{
+            setCurrentUser({
+                name:currentUser.name,
+                about: currentUser.about,
+                avatar: newAvatar.avatar
+            })
+        })
+        .then(()=>{closeAllPopups()})
         .catch(err => console.log("Error: " + err));
     }
 
@@ -91,19 +105,11 @@ function App() {
 
                     </div>
                     </PopupWithForm>
-
-                <PopupWithForm
-                    isOpen={isEditAvatarPopupOpen}
-                    onClose={closeAllPopups}
-                    name='avatar' title='Change profile picture'
-                    >
-                   <div>
-                        <label className="popup__label"><input className="popup__input popup__input_type_avatar-link"
-                            id="avatar-input" type="url" name="link" placeholder="Avatar Link" required />
-                            <span className="popup__input-error" id="avatar-input-error"></span>
-                        </label>
-                    </div>
-                    </PopupWithForm>
+                    <EditAvatarPopup
+                     isOpen={isEditAvatarPopupOpen} 
+                    onClose={closeAllPopups} 
+                    onUpdateAvatar={handleUpdateAvatar}/>
+                
                    
                 <ImagePopup
                     isOpen={isImagePopupOpen}
