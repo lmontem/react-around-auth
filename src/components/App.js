@@ -1,11 +1,12 @@
 import React from 'react';
 import Header from './Header.js';
-import Main from "./Main.js";
+import Main from './Main.js';
 import Footer from './Footer.js';
-import PopupWithForm from "./PopupWithForm.js";
+import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './ImagePopup.js';
 import { api } from '../utils/api.js';
-import CurrentUserContext from "../contexts/CurrentUserContext.js";
+import CurrentUserContext from '../contexts/CurrentUserContext.js';
+import EditProfilePopup from './EditProfilePopup.js';
 
 
 function App() {
@@ -45,6 +46,17 @@ function App() {
         setImagePopupOpen(false);
         setSelectedCard('');
     }
+    function handleUpdateUser(name, about) {
+        api.changeUserInfo({name,about})
+        .then(()=>{
+            setCurrentUser({
+                name,
+                about
+            })
+        })
+        .then(()=>setEditProfilePopupOpen(false))
+        .catch(err => console.log("Error: " + err));
+    }
 
     return ((
         <>
@@ -58,25 +70,10 @@ function App() {
                     handleCardClick={handleCardClick}
                 />
                 <Footer />
-                <PopupWithForm
-                    isOpen={isEditProfilePopupOpen}
-                    onClose={closeAllPopups}
-                    name='edit-profile' title='Edit profile'
-                    >
-                    <div>
-                        <label className="popup__label">
-                            <input className="popup__input popup__input_type_name" id="name-input" type="text" name="name" placeholder="name" required minLength="2" maxLength="40" />
-                            <span className="popup__input-error" id="name-input-error">
-                            </span>
-                        </label>
-                        <label className="popup__label">
-                            <input className="popup__input popup__input_type_about" id="about-input" type="text" name="about" placeholder="about me" required minLength="2" maxLength="200" />
-                            <span className="popup__input-error" id="about-input-error">
-                            </span>
-                        </label>
-
-                    </div>
-                    </PopupWithForm>
+                <EditProfilePopup 
+                isOpen={isEditProfilePopupOpen}
+                 onClose={closeAllPopups}
+                 onUpdateUser={handleUpdateUser} />
                 <PopupWithForm
                     isOpen={isAddPlacePopupOpen}
                     onClose={closeAllPopups}
