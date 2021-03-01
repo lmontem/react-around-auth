@@ -11,6 +11,9 @@ function Card(props) {
     function handleLikeClick() {
         props.onCardLike(props.card);
     }
+    function  handleDeleteClick() {
+        props.onCardLike(props.card);
+    }
 // Checking if you are the owner of the current card
 const isOwn = props.card.owner._id === currentUser._id;
 
@@ -23,15 +26,15 @@ const isLiked = props.card.likes.some(i => i._id === currentUser._id);
 
 // Create a variable which you then set in `className` for the like button
 const cardLikeButtonClassName =  (
-    `card__like-btn ${isLiked ? 'card__like-button_clicked' : 'card__like-btn'}`
+    `card__like-btn ${isLiked ? 'card__like-btn_active' : 'card__like-btn'}`
   );
 
     return ((
         <div className="card">
-            <button className={cardDeleteButtonClassName} type="button" aria-label="Delete"></button>
-            <div onClick={handleClick} className="card__image" style={{ backgroundImage: `url(${props.card.link})` }}></div>
+            <button className={cardDeleteButtonClassName} onClick={props.onCardDelete} type="button" aria-label="Delete"></button>
+            <div onClick={props.onCardClick} className="card__image" style={{ backgroundImage: `url(${props.card.link})` }}></div>
             <h2 className="card__heading">{props.card.name}</h2>
-            <button className={cardLikeButtonClassName} type="button" aria-label="Like" onClick={handleLikeClick}></button>
+            <button className={cardLikeButtonClassName} type="button" aria-label="Like" onClick={props.onCardLike}></button>
             <p className="card__like-count">{props.card.likes.length}</p>
         </div>
     ))
