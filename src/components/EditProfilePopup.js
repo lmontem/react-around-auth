@@ -1,6 +1,6 @@
 import PopupWithForm from "./PopupWithForm.js";
 import React from "react";
-import  CurrentUserContext  from "../contexts/CurrentUserContext.js";
+import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 function EditProfilePopup(props) {
     const [name, setName] = React.useState('');
@@ -15,20 +15,20 @@ function EditProfilePopup(props) {
     }
     function handleSubmit(e) {
         // Prevent the browser from navigating to the form address
-        e.preventDefault();      
+        e.preventDefault();
         // Pass the values of the managed components to the external handler
         props.onUpdateUser(
-          name,
-          description,
+            name,
+            description,
         );
-      }
+    }
     React.useEffect(() => {
         setName(currentUser.name);
         setDescription(currentUser.about);
-      }, [currentUser]); 
+    }, [currentUser]);
 
     return (
-        <PopupWithForm isOpen={props.isOpen} onClose={props.onClose} onSubmit= {handleSubmit} name='edit-profile' title='Edit Profile'>
+        <PopupWithForm isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit} name='edit-profile' title='Edit Profile'>
             <div>
                 <label className="popup__label">
                     <input className="popup__input popup__input_type_name" id="name-input" type="text" value={name} onChange={handleName} name="name" placeholder="name" required minLength="2" maxLength="40" />
@@ -40,7 +40,7 @@ function EditProfilePopup(props) {
                     <span className="popup__input-error" id="about-input-error">
                     </span>
                 </label>
-
+                <button className="popup__save-btn" type="submit" aria-label="Save">Save</button>
             </div>
         </PopupWithForm>
     )

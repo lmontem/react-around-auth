@@ -1,44 +1,10 @@
 import React from "react";
-import { api } from '../utils/api.js';
 import Card from './Card.js';
-import  CurrentUserContext  from "../contexts/CurrentUserContext.js";
+import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 function Main(props) {
 
-const currentUser = React.useContext(CurrentUserContext);
-    
-    const [cards, setCards] = React.useState([]);
-    React.useEffect(() => {
-        api.getAllInfo()
-            .then(([userData, initialCardList]) => {
-              
-                return (initialCardList);
-            })
-            .then((res) => {
-                setCards(res);
-            })
-            .catch(err => console.log("Error: " + err));
-    }, [])
-
-    function handleCardLike(card) {
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
-                
-        api.changeLikeCardStatus(card._id, isLiked)
-            .then((newCard)=>{
-               const newCards= cards.map((c)=> c._id === card._id ? newCard : c);
-            setCards(newCards);
-        })
-        .catch(err => console.log("Error: " + err));
-    }
-
-    function handleCardDelete(card) {
-        api.removeCard(card._id)
-        .then(()=>{
-            const newCardList= cards.filter((c)=> c._id !== card._id);
-            setCards(newCardList);
-        })
-        .catch(err => console.log("Error: " + err));
-    }
+    const currentUser = React.useContext(CurrentUserContext);
 
     return (
         (
@@ -58,12 +24,13 @@ const currentUser = React.useContext(CurrentUserContext);
                     <button onClick={props.handleAddPlaceClick} className="profile__add-btn" type="button" aria-label="Add picture"></button>
                 </section>
                 <section className="cards">
-                    {cards.map((card) => (
+                    {props.cards.map((card) => (
                         <Card card={card}
                             key={card._id}
                             onCardClick={() => { props.handleCardClick(card) }}
-                            onCardLike={() => { handleCardLike(card) }}
-                            onCardDelete={()=>{handleCardDelete(card)}}
+                            onCardLike={() => { props.handleCardLike(card) }}
+                            onCardDelete={() => { props.handleCardDelete(card) }}
+                            onDeleteClick={() => { props.handleDeleteCardClick(card) }}
                         />
                     )
                     )}

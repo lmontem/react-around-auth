@@ -8,6 +8,7 @@ function ImagePopup(props) {
                     <figcaption className="popup__image-title">{props.selectedCard.name}</figcaption>
                 </figure>
             </div>
+
         </div>
 
         ))

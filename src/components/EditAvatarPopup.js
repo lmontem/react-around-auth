@@ -22,6 +22,7 @@ function EditAvatarPopup(props) {
                     id="avatar-input" type="url" name="link" placeholder="Avatar Link" required />
                     <span className="popup__input-error" id="avatar-input-error"></span>
                 </label>
+                <button className="popup__save-btn" type="submit" aria-label="Save">Update</button>
             </div>
         </PopupWithForm>
     )
