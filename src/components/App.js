@@ -17,8 +17,8 @@ function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
     const [isDeleteCardPopupOpen, setDeleteCardPopupOpen] = React.useState(false);
     const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
-    const [selectedCard, setSelectedCard] = React.useState('');
-    const [currentUser, setCurrentUser] = React.useState('');
+    const [selectedCard, setSelectedCard] = React.useState({});
+    const [currentUser, setCurrentUser] = React.useState({});
     const [cards, setCards] = React.useState([]);
 
     //get initial cards and user info
@@ -59,7 +59,7 @@ function App() {
         setAddPlacePopupOpen(false);
         setDeleteCardPopupOpen(false);
         setImagePopupOpen(false);
-        setSelectedCard('');
+        setSelectedCard({});
     }
     //sends like info to api
     function handleCardLike(card) {
@@ -87,27 +87,19 @@ function App() {
     //sends update on user info to api
     function handleUpdateUser(name, about) {
         api.changeUserInfo({ name, about })
-            .then(() => {
-                setCurrentUser({
-                    name,
-                    about,
-                    avatar: currentUser.avatar
-                })
+            .then((userData) => {
+                setCurrentUser(userData)
             })
-            .then(() => closeAllPopups())
+            .then(closeAllPopups)
             .catch(err => console.log("Error: " + err));
     }
     //sends update of user image to api
     function handleUpdateAvatar(newAvatar) {
         api.setAvatar(newAvatar)
-            .then(() => {
-                setCurrentUser({
-                    name: currentUser.name,
-                    about: currentUser.about,
-                    avatar: newAvatar.avatar
-                })
+            .then((userData) => {
+                setCurrentUser(userData)
             })
-            .then(() => { closeAllPopups() })
+            .then(closeAllPopups)
             .catch(err => console.log("Error: " + err));
     }
     //sends new card info to api
