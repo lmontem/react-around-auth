@@ -1,4 +1,5 @@
 import React from 'react';
+import {Switch, Route, Redirect } from "react-router-dom";
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
@@ -9,17 +10,25 @@ import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
 import DeleteCardPopup from './DeleteCardPopup.js';
+import ProtectedRoute from './ProtectedRoute';
+import Login from './Login';
+import Register from './Register';
+import InfoToolTip from './InfoToolTip';
 
 
 function App() {
+    //declaring the state of popups
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
     const [isDeleteCardPopupOpen, setDeleteCardPopupOpen] = React.useState(false);
     const [isImagePopupOpen, setImagePopupOpen] = React.useState(false);
+    const [isInfoToolTipOpen, setInfoToolTipOpen] = React.useState(false);
+    //declaring state of misc
     const [selectedCard, setSelectedCard] = React.useState({});
     const [currentUser, setCurrentUser] = React.useState({});
     const [cards, setCards] = React.useState([]);
+    const [loggedIn, setLoggedIn] = React.useState(false);
 
     //get initial cards and user info
     React.useEffect(() => {
@@ -59,6 +68,7 @@ function App() {
         setAddPlacePopupOpen(false);
         setDeleteCardPopupOpen(false);
         setImagePopupOpen(false);
+        setInfoToolTipOpen(false);
         setSelectedCard({});
     }
     //sends like info to api
@@ -116,8 +126,14 @@ function App() {
         <>
             <div className="page">
                 <CurrentUserContext.Provider value={currentUser}>
+                    <Switch>
                     <Header />
-                    <Main
+                    <ProtectedRoute
+                        path= '/'
+                        component={Main}
+                        //isLoggedIn={isLoggedIn} 
+                        //handleSignOut={handleSignOut}
+                        //userEmail={userEmail}                   
                         handleEditProfileClick={handleEditProfileClick}
                         handleEditAvatarClick={handleEditAvatarClick}
                         handleAddPlaceClick={handleAddPlaceClick}
@@ -129,6 +145,7 @@ function App() {
                         onCardLike={(card) => { handleCardLike(card) }}
                         handleCardLike={handleCardLike}
                     />
+                    </Switch>
                     <Footer />
                     <EditProfilePopup
                         isOpen={isEditProfilePopupOpen}
@@ -154,6 +171,11 @@ function App() {
                         isOpen={isImagePopupOpen}
                         selectedCard={selectedCard}
                         onClose={closeAllPopups} />
+
+                    <InfoToolTip
+                        isOpen={isInfoToolTipOpen}
+                        onClose={closeAllPopups} />
+
                 </CurrentUserContext.Provider>
             </div>
         </>
