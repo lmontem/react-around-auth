@@ -1,10 +1,10 @@
 import React from 'react';
-import {Switch, Route, Redirect } from "react-router-dom";
+import {Switch, Route, Redirect, useHistory } from "react-router-dom";
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
-import { api } from '../utils/Api.js';
+import { api } from '../utils/api.js';
 import CurrentUserContext from '../contexts/CurrentUserContext.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
@@ -14,6 +14,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import InfoToolTip from './InfoToolTip';
+import * as auth from '../utils/Auth';
 
 
 function App() {
@@ -29,6 +30,8 @@ function App() {
     const [currentUser, setCurrentUser] = React.useState({});
     const [cards, setCards] = React.useState([]);
     const [loggedIn, setLoggedIn] = React.useState(false);
+    const [userData, setUserData] = React.useState({});
+    const history = useHistory();
 
     //get initial cards and user info
     React.useEffect(() => {
@@ -42,6 +45,10 @@ function App() {
             })
             .catch(err => console.log("Error: " + err));
     }, [])
+
+    React.useEffect(()=>{
+        handleCheckToken();
+    },[])
 
     //handle opening of popups
     function handleEditAvatarClick() {
@@ -122,12 +129,57 @@ function App() {
             .catch(err => console.log("Error: " + err));
     }
 
+    //login 
+    function handleLogin(email, password) {
+        auth
+        .authorize(email, password)
+        .then(res=>{
+            handleCheckToken();
+            history.push('/');
+        })
+    }
+
+    function handleSignOut() {
+        localStorage.removeItem('jwt');
+        setLoggedIn(false);
+        history.push('/signin');
+        
+    }
+
+    function handleCheckToken() {
+        let jwt = localStorage.getItem('jwt')
+        if(jwt){
+            auth
+            .checkToken(jwt)
+            .then(res=>{
+                if(res){
+                    const userData ={
+                        username: res.username,
+                        email: res.email
+                    }
+                    setLoggedIn(true);
+                    setUserData(userData);
+                    history.push('/')
+                }
+            })
+            .catch(err=>console.log(err))            
+        }        
+    }
+
     return ((
         <>
             <div className="page">
                 <CurrentUserContext.Provider value={currentUser}>
                     <Switch>
-                    <Header />
+                        <Route path='/signin'>
+                            <Header link={'/signup'} />
+                            <Login handleLogin= {handleLogin} />
+                        </Route>
+                        <Route path='/signup'>
+                        <Header link= {'/signin'} />
+                            <Register />
+                        </Route>
+                    
                     <ProtectedRoute
                         path= '/'
                         component={Main}
