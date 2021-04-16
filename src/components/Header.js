@@ -1,4 +1,5 @@
 import logo from '../images/logo.svg';
+import { Link } from 'react-router-dom';
 
 function Header(props) {
     return (
@@ -6,8 +7,10 @@ function Header(props) {
             <header className="header">
                 <img className="logo" src={logo} alt="around the U.S. logo" />
                 <div className="header__nav">
-                <p className="header_email">{props.userEmail}</p>
-                <p className="header__link">{props.link}</p>
+                <p className="header_email">{props.userEmail}</p>               
+                 <Link to="/signup" className="header__link">
+                    Sign up
+              </Link>
                 </div>
                 
             </header>

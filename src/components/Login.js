@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
 import * as auth from '../utils/Auth';
 
@@ -11,57 +11,56 @@ function Login(props) {
     function handleSubmit(e) {
         e.preventDefault();
         if (!email || !password) {
-            return;}
+            return;
+        }
 
         auth.authorize(email, password)
-        .then(data=>{
-            if(!data){
-                setMessage('Something went wrong')
-            }
-           if(data.jwt){
-               setEmail('')
-               setPassword('')
-               setMessage('')
-               
-               props.handleLogin()
-               history.push('/')//where does this lead to?
-           } 
-        })
+            .then(data => {
+                if (!data) {
+                    setMessage('Something went wrong')
+                }
+                if (data.jwt) {
+                    setEmail('')
+                    setPassword('')
+                    setMessage('')
+
+                    props.handleLogin()
+                    history.push('/')//where does this lead to?
+                }
+            })
     }
-        
 
 
 
-        return (
-            <div className="login" onSubmit={handleSubmit}>
-                <p className="login__welcome">
-                    Log in
+
+    return (
+        <div className="login" onSubmit={handleSubmit}>
+            <p className="login__welcome">
+                Log in
             </p>
-            <p className= 'login__error'>
+            <p className='login__error'>
                 {message}
             </p>
-                <form className="login__form">
-                    <input  required name="email" type="email" placeholder="Email" value={email} onChange={(e) => {setEmail(e.target.value)}}
-                    />
-                    
-                    <input required name="password" type="password" placeholder="Password" value={password} onChange={(e) => {setPassword(e.target.value)}}
-                    />
-                    <div className="login__button-container">
-                        <button type="submit" className="login__btn">
-                            Log in
+            <form className="login__form">
+                <input className="login__input" required name="email" type="email" placeholder="Email" value={email} onChange={(e) => { setEmail(e.target.value) }}
+                />
+
+                <input className="login__input" required name="password" type="password" placeholder="Password" value={password} onChange={(e) => { setPassword(e.target.value) }}
+                />
+                <button type="submit" className="login__btn">
+                    Log in
                 </button>
-                    </div>
-                </form>
-                <div className="login__signup">
-                    <p>Not a member yet?</p>
+
+            </form>
+            <p className="login__signup">Not a member yet?
                     <Link to="/signup" className="signup__link">
-                        Sign up here!
-              </Link>
-                </div>
-            </div>
-        );
+                    Sign up here!
+              </Link></p>
 
-    }
+        </div>
+    );
+
+}
 
 
-    export default withRouter(Login);
+export default withRouter(Login);

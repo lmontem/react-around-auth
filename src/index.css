@@ -10,3 +10,6 @@
 @import url('./blocks/card/card.css');
 @import url('./blocks/footer/footer.css');
 @import url('./blocks/popup/__opened/popup__opened.css');
+@import url('./blocks/login/login.css');
+@import url('./blocks/signup__link.css');
+
