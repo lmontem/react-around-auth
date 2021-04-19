@@ -11,3 +11,17 @@
     margin-top: 200px;
     margin-bottom: 15px;
 }
+
+.login__btn:hover{
+    opacity: 0.8;
+}
+
+@media  screen and (max-width: 425px) {
+    .login__btn{
+        min-width: 260px;
+        margin-top: 153px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        line-height: 19px;
+    }
+}

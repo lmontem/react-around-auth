@@ -1,63 +1,37 @@
-import React, { useState, UseHistory } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import * as auth from '../utils/Auth.js';
+import React, { useState } from 'react';
+import { Link, withRouter, useHistory } from 'react-router-dom';
 
-function Register() {
-    const [username, setUsername] = useState('');
+function Register(props) {
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMessage] = useState('');
-    const history = UseHistory();
+    const history = useHistory();
 
     function handleSubmit(e) {
         e.preventDefault();
-        if (password !== confirmPassword) {
-            setMessage('Passwords are not the same')
-        } else {
-            auth.register(username, password, email)
-                .then(res => {
-                    if (res.statusCode !== 400) {
-                        setMessage('')
-                        history.push('/signin')
-                    } else {
-                        setMessage('Something went wrong')
-                    }
-                })
+        props.handleRegister(email,password);
+        const jwt = localStorage.getItem('jwt');
+        if(jwt){
+            history.push('/');
         }
-        //anohter .then to reset form zero out all states
     }
-
+  
 
     return (
-        <div className="register">
-            <p className="register__welcome">
-                Please register.
+        <div className="register" onSubmit={handleSubmit}>
+            <p className="login__welcome">
+                Sign up
                  </p>
-            <form className="register__form">
-                <label>
-                    Username:
-                     </label>
-                <input name="username" type="text" value={username} onChange={(e) => { setUsername(e.target.value) }} />
-                <label>
-                    Email:
-                     </label>
-                <input name="email" type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} />
-                <label>
-                    Password:
-                    </label>
-                <input name="password" type="password" value={password} onChange={(e) => { setPassword(e.target.value) }} />
-                <label>
-                    Confirm password:
-                     </label>
-                <input name="confirmPassword" type="password" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value) }} />
+            <form className="login__form">
+                <input className="login__input" placeholder="Email" name="email" type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} />
+                <input className="login__input" placeholder="Password" name="password" type="password" value={password} onChange={(e) => { setPassword(e.target.value) }} />
+                <button type="submit" className="login__btn">Sign up</button>
             </form>
-            <div className="register__button-container">
-                <button onClick={handleSubmit()} className="register__link">Sign up</button>
-            </div>
-            <div className="register__signin">
-                <p>Already a member?</p>
-                <Link to="signin" className="register__login-link">Log in here</Link>
+
+            <div className="login__signup">
+                <p>Already a member?
+                <Link to="signin" className="signup__link">Log in here!</Link>
+                </p>
             </div>
         </div>
     )

@@ -8,9 +8,9 @@ function Header(props) {
                 <img className="logo" src={logo} alt="around the U.S. logo" />
                 <div className="header__nav">
                 <p className="header_email">{props.userEmail}</p>               
-                 <Link to="/signup" className="header__link">
-                    Sign up
-              </Link>
+                <Link to={props.link} className="header__link" onClick={props.handleSignOut}>
+                    {props.text} 
+                </Link>
                 </div>
                 
             </header>

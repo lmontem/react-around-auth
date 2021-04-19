@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route, Redirect, useHistory } from "react-router-dom";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
@@ -15,6 +15,8 @@ import Login from './Login';
 import Register from './Register';
 import InfoToolTip from './InfoToolTip';
 import * as auth from '../utils/Auth';
+import success from '../images/success.png';
+import fail from '../images/fail.png';
 
 
 function App() {
@@ -30,8 +32,10 @@ function App() {
     const [currentUser, setCurrentUser] = React.useState({});
     const [cards, setCards] = React.useState([]);
     const [loggedIn, setLoggedIn] = React.useState(false);
-    const [userData, setUserData] = React.useState({});
+    const [userEmail, setUserEmail] = React.useState({});
     const history = useHistory();
+    const [toolTipMessage, setToolTipMessage] = React.useState('');
+    const [toolTipImage, setToolTipImage] = React.useState('');
 
     //get initial cards and user info
     React.useEffect(() => {
@@ -46,9 +50,9 @@ function App() {
             .catch(err => console.log("Error: " + err));
     }, [])
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         handleCheckToken();
-    },[])
+    }, [])
 
     //handle opening of popups
     function handleEditAvatarClick() {
@@ -132,38 +136,55 @@ function App() {
     //login 
     function handleLogin(email, password) {
         auth
-        .authorize(email, password)
-        .then(res=>{
-            handleCheckToken();
-            history.push('/');
-        })
+            .authorize(email, password)
+            .then(res => {
+                handleCheckToken();
+                history.push('/');
+            })
+    }
+
+    function handleRegister(email, password) {
+        auth.register(email, password)
+            .then(res => {
+                if (res.statusCode === 400 || !res) {
+                    setToolTipMessage('One of the fields was filled incorrectly');
+                    setToolTipImage(fail);
+                    setInfoToolTipOpen(true);
+                }
+                else {
+                    setToolTipMessage('Success! You have now been registered.');
+                    setToolTipImage(success);
+                    setInfoToolTipOpen(true);
+
+                    history.push('/signin')
+                }
+            })
     }
 
     function handleSignOut() {
         localStorage.removeItem('jwt');
         setLoggedIn(false);
         history.push('/signin');
-        
+
     }
 
     function handleCheckToken() {
         let jwt = localStorage.getItem('jwt')
-        if(jwt){
+        if (jwt) {
             auth
-            .checkToken(jwt)
-            .then(res=>{
-                if(res){
-                    const userData ={
-                        username: res.username,
-                        email: res.email
+                .checkToken(jwt)
+                .then(res => {
+                    if (res) {
+                        const userEmail = {
+                            email: res.email
+                        };
+                        setLoggedIn(true);
+                        setUserEmail(userEmail);
+                        history.push('/')
                     }
-                    setLoggedIn(true);
-                    setUserData(userData);
-                    history.push('/')
-                }
-            })
-            .catch(err=>console.log(err))            
-        }        
+                })
+                .catch(err => console.log(err))
+        }
     }
 
     return ((
@@ -171,32 +192,31 @@ function App() {
             <div className="page">
                 <CurrentUserContext.Provider value={currentUser}>
                     <Switch>
-                        <Route path='/signin'>
-                            <Header link={'/signup'} />
-                            <Login handleLogin= {handleLogin} />
-                        </Route>
                         <Route path='/signup'>
-                        <Header link= {'/signin'} />
-                            <Register />
+                            <Header link={'/signin'} text={"Log In"} />
+                            <Register handleRegister={handleRegister} />
                         </Route>
-                    
-                    <ProtectedRoute
-                        path= '/'
-                        component={Main}
-                        //isLoggedIn={isLoggedIn} 
-                        //handleSignOut={handleSignOut}
-                        //userEmail={userEmail}                   
-                        handleEditProfileClick={handleEditProfileClick}
-                        handleEditAvatarClick={handleEditAvatarClick}
-                        handleAddPlaceClick={handleAddPlaceClick}
-                        handleDeleteCardClick={handleDeleteCardClick}
-                        handleCardClick={handleCardClick}
-                        cards={cards}
-                        onCardDelete={(card) => { handleCardDelete(card) }}
-                        handleCardDelete={handleCardDelete}
-                        onCardLike={(card) => { handleCardLike(card) }}
-                        handleCardLike={handleCardLike}
-                    />
+                        <Route path='/signin'>
+                            <Header link={'/signup'} text={"Sign Up"} />
+                            <Login handleLogin={handleLogin} />
+                        </Route>
+                        <Header link={'/signin'} text={"Log out"} handleSignOut={handleSignOut} />
+                        <ProtectedRoute
+                            path='/'
+                            component={Main}
+                            loggedIn={loggedIn}                            
+                            userEmail={userEmail}
+                            handleEditProfileClick={handleEditProfileClick}
+                            handleEditAvatarClick={handleEditAvatarClick}
+                            handleAddPlaceClick={handleAddPlaceClick}
+                            handleDeleteCardClick={handleDeleteCardClick}
+                            handleCardClick={handleCardClick}
+                            cards={cards}
+                            onCardDelete={(card) => { handleCardDelete(card) }}
+                            handleCardDelete={handleCardDelete}
+                            onCardLike={(card) => { handleCardLike(card) }}
+                            handleCardLike={handleCardLike}
+                        />
                     </Switch>
                     <Footer />
                     <EditProfilePopup
@@ -226,7 +246,9 @@ function App() {
 
                     <InfoToolTip
                         isOpen={isInfoToolTipOpen}
-                        onClose={closeAllPopups} />
+                        onClose={closeAllPopups}
+                        message={toolTipMessage}
+                        imageURL={toolTipImage} />
 
                 </CurrentUserContext.Provider>
             </div>

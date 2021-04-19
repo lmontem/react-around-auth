@@ -1,7 +1,7 @@
 
 export const BASE_URL = 'https://register.nomoreparties.co'
 
-export const register = (password, email) => {
+export const register = (email, password) => {
 
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
@@ -9,19 +9,16 @@ export const register = (password, email) => {
             'Accept': 'application/json',
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ password, email })
+        body: JSON.stringify({ email, password })
     })
         .then((res) => {
+            console.log(res)
             return res.json()
         })
-        .then(res => {
-            if (res === 400) {
-                console.log('one of the fields was filled in in correctly')
-            }
-        })
+        
 }
 
-export const authorize = (password, email) => {
+export const authorize = (email, password) => {
 
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
@@ -29,7 +26,7 @@ export const authorize = (password, email) => {
             'Accept': 'application/json',
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ password, email })
+        body: JSON.stringify({ email, password })
     })
         .then(res => {
             return res.json()

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
-import * as auth from '../utils/Auth';
+
 
 function Login(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
     const history = useHistory();
 
     function handleSubmit(e) {
@@ -13,21 +12,11 @@ function Login(props) {
         if (!email || !password) {
             return;
         }
-
-        auth.authorize(email, password)
-            .then(data => {
-                if (!data) {
-                    setMessage('Something went wrong')
-                }
-                if (data.jwt) {
-                    setEmail('')
-                    setPassword('')
-                    setMessage('')
-
-                    props.handleLogin()
-                    history.push('/')//where does this lead to?
-                }
-            })
+        props.handleLogin(email, password);
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) {
+            history.push('/')
+        }
     }
 
 
@@ -38,9 +27,7 @@ function Login(props) {
             <p className="login__welcome">
                 Log in
             </p>
-            <p className='login__error'>
-                {message}
-            </p>
+           
             <form className="login__form">
                 <input className="login__input" required name="email" type="email" placeholder="Email" value={email} onChange={(e) => { setEmail(e.target.value) }}
                 />

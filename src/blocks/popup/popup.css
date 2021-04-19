@@ -13,6 +13,8 @@
 @import url('./__input/popup__input_type_error.css');
 @import url('./__error/popup__error_visible.css');
 @import url('./__save-btn/popup__save-btn_disabled.css');
+@import url('./__info-message/popup__info-message.css');
+@import url('./__info-image/popup__info-image.css');
 .popup {
     width: 100%;
     height: 100%;
