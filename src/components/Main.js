@@ -4,7 +4,7 @@ import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 function Main(props) {
 
-    const currentUser = React.useContext(CurrentUserContext);
+    const currentUserContext = React.useContext(CurrentUserContext);
 
     return (
         (
@@ -12,13 +12,13 @@ function Main(props) {
 
                 <section className="profile">
                     <div className="profile__avatar-container">
-                        <img className="profile__avatar" src={currentUser.avatar} alt="profile" />
+                        <img className="profile__avatar" src={currentUserContext.avatar} alt="profile" />
                         <button onClick={props.handleEditAvatarClick} className="profile__edit-avatar" aria-label="edit-avatar" type="button"></button>
                     </div>
                     <div className="profile__info">
-                        <h1 className="profile__name">{currentUser.name}</h1>
+                        <h1 className="profile__name">{currentUserContext.name}</h1>
                         <button onClick={props.handleEditProfileClick} className="profile__edit-btn" type="button" aria-label="Edit profile"></button>
-                        <p className="profile__occupation">{currentUser.about}</p>
+                        <p className="profile__occupation">{currentUserContext.about}</p>
 
                     </div>
                     <button onClick={props.handleAddPlaceClick} className="profile__add-btn" type="button" aria-label="Add picture"></button>

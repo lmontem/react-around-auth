@@ -12,13 +12,14 @@ export const register = (email, password) => {
         body: JSON.stringify({ email, password })
     })
         .then((res) => {
-            if(res === 201){
-               return res.json();
+            console.log(res)
+            if (res.status === 201) {
+                return res.json();
             }
         })
-        
-        .catch(err=>console.log(err))
-        
+
+        .catch(err => console.log(err))
+
 }
 
 export const authorize = (email, password) => {
@@ -35,14 +36,13 @@ export const authorize = (email, password) => {
             return res.json()
         })
         .then(data => {
-            if (data.token) {
-                localStorage.setItem('jwt', data.token);
-                return data
-            } else {
-                return
-            }
+
+            localStorage.setItem('jwt', data.token);
+            return
+
         })
-        .then(res => {
+
+        .catch(res => {
             if (res === 400) {
                 console.log('one of the fields was filled in in correctly')
             }
@@ -62,6 +62,7 @@ export const checkToken = (token) => {
         }
     })
         .then(res => {
+
             return res.json()
         })
         .then(data => data)

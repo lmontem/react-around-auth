@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
@@ -39,7 +39,7 @@ function App() {
 
     React.useEffect(() => {
         handleCheckToken();
-    },[]);
+    });
 
     //get initial cards and user info
     React.useEffect(() => {
@@ -137,12 +137,14 @@ function App() {
 
     //login 
     function handleLogin(email, password) {
+        
         auth
             .authorize(email, password)
+           
             .then(res => {
+                
                 handleCheckToken();
-                //setLoggedIn(true);
-                setUserEmail(userEmail);
+                
                 history.push('/');
             })
             .catch(err => { console.log(err) })
@@ -164,7 +166,7 @@ function App() {
                     setInfoToolTipOpen(true);
                     setUserEmail(userEmail);
 
-                    history.push('/')
+                    history.push('/signin')
                 }
             })
     }
@@ -185,6 +187,7 @@ function App() {
                 .checkToken(jwt)               
                 .then(res => {
                     if (res) {                                               
+                        
                         const userEmail = res.data.email;
                         setUserEmail(userEmail);
                         setLoggedIn(true);                        
@@ -193,8 +196,6 @@ function App() {
                 }
                 )
                 .catch(err => console.log(err))
-        }else{
-            history.push('/signin')
         }
     }
 
@@ -212,6 +213,7 @@ function App() {
                             <Login handleLogin={handleLogin} />
                         </Route>
                         <Header link={'/signin'} text={"Log out"} userEmail={userEmail} handleSignOut={handleSignOut} />
+                        </Switch>
                         <ProtectedRoute
                             path='/'
                             component={Main}
@@ -222,12 +224,13 @@ function App() {
                             handleDeleteCardClick={handleDeleteCardClick}
                             handleCardClick={handleCardClick}
                             cards={cards}
+                            currentUser={currentUser}
                             onCardDelete={(card) => { handleCardDelete(card) }}
                             handleCardDelete={handleCardDelete}
                             onCardLike={(card) => { handleCardLike(card) }}
                             handleCardLike={handleCardLike}
                         />
-                    </Switch>
+                    
                     <Footer />
                     <EditProfilePopup
                         isOpen={isEditProfilePopupOpen}
