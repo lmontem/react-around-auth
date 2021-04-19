@@ -140,12 +140,8 @@ function App() {
         auth
             .authorize(email, password)
             .then(res => {
-                if (!res) {
-                    setToolTipMessage('One of the fields was filled incorrectly');
-                    setToolTipImage(fail);
-                    setInfoToolTipOpen(true);
-                }
                 handleCheckToken();
+                //setLoggedIn(true);
                 setUserEmail(userEmail);
                 history.push('/');
             })
@@ -155,10 +151,12 @@ function App() {
     function handleRegister(email, password) {
         auth.register(email, password)
             .then(res => {
-                if (res.statusCode === 400 || !res) {
+               
+                if (!res) {
                     setToolTipMessage('One of the fields was filled incorrectly');
                     setToolTipImage(fail);
                     setInfoToolTipOpen(true);
+                    
                 }
                 else {
                     setToolTipMessage('Success! You have now been registered.');
@@ -166,7 +164,7 @@ function App() {
                     setInfoToolTipOpen(true);
                     setUserEmail(userEmail);
 
-                    history.push('/signin')
+                    history.push('/')
                 }
             })
     }
@@ -184,19 +182,19 @@ function App() {
         
         if (jwt) {
             auth
-                .checkToken(jwt)
+                .checkToken(jwt)               
                 .then(res => {
-                    if (res) {
+                    if (res) {                                               
                         const userEmail = res.data.email;
                         setUserEmail(userEmail);
                         setLoggedIn(true);                        
                         history.push('/')
-                    }else{
-                        history.push('/signin')
                     }
                 }
                 )
                 .catch(err => console.log(err))
+        }else{
+            history.push('/signin')
         }
     }
 

@@ -12,9 +12,12 @@ export const register = (email, password) => {
         body: JSON.stringify({ email, password })
     })
         .then((res) => {
-            console.log(res)
-            return res.json()
+            if(res === 201){
+               return res.json();
+            }
         })
+        
+        .catch(err=>console.log(err))
         
 }
 
