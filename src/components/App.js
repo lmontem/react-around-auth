@@ -32,10 +32,14 @@ function App() {
     const [currentUser, setCurrentUser] = React.useState({});
     const [cards, setCards] = React.useState([]);
     const [loggedIn, setLoggedIn] = React.useState(false);
-    const [userEmail, setUserEmail] = React.useState({});
+    const [userEmail, setUserEmail] = React.useState('');
     const history = useHistory();
     const [toolTipMessage, setToolTipMessage] = React.useState('');
     const [toolTipImage, setToolTipImage] = React.useState('');
+
+    React.useEffect(() => {
+        handleCheckToken();
+    },[]);
 
     //get initial cards and user info
     React.useEffect(() => {
@@ -50,9 +54,7 @@ function App() {
             .catch(err => console.log("Error: " + err));
     }, [])
 
-    React.useEffect(() => {
-        handleCheckToken();
-    }, [])
+  
 
     //handle opening of popups
     function handleEditAvatarClick() {
@@ -138,9 +140,16 @@ function App() {
         auth
             .authorize(email, password)
             .then(res => {
+                if (!res) {
+                    setToolTipMessage('One of the fields was filled incorrectly');
+                    setToolTipImage(fail);
+                    setInfoToolTipOpen(true);
+                }
                 handleCheckToken();
+                setUserEmail(userEmail);
                 history.push('/');
             })
+            .catch(err => { console.log(err) })
     }
 
     function handleRegister(email, password) {
@@ -155,6 +164,7 @@ function App() {
                     setToolTipMessage('Success! You have now been registered.');
                     setToolTipImage(success);
                     setInfoToolTipOpen(true);
+                    setUserEmail(userEmail);
 
                     history.push('/signin')
                 }
@@ -164,25 +174,28 @@ function App() {
     function handleSignOut() {
         localStorage.removeItem('jwt');
         setLoggedIn(false);
+        setUserEmail('');
         history.push('/signin');
 
     }
 
     function handleCheckToken() {
-        let jwt = localStorage.getItem('jwt')
+        const jwt = localStorage.getItem('jwt')
+        
         if (jwt) {
             auth
                 .checkToken(jwt)
                 .then(res => {
                     if (res) {
-                        const userEmail = {
-                            email: res.email
-                        };
-                        setLoggedIn(true);
+                        const userEmail = res.data.email;
                         setUserEmail(userEmail);
+                        setLoggedIn(true);                        
                         history.push('/')
+                    }else{
+                        history.push('/signin')
                     }
-                })
+                }
+                )
                 .catch(err => console.log(err))
         }
     }
@@ -200,12 +213,11 @@ function App() {
                             <Header link={'/signup'} text={"Sign Up"} />
                             <Login handleLogin={handleLogin} />
                         </Route>
-                        <Header link={'/signin'} text={"Log out"} handleSignOut={handleSignOut} />
+                        <Header link={'/signin'} text={"Log out"} userEmail={userEmail} handleSignOut={handleSignOut} />
                         <ProtectedRoute
                             path='/'
                             component={Main}
-                            loggedIn={loggedIn}                            
-                            userEmail={userEmail}
+                            loggedIn={loggedIn}
                             handleEditProfileClick={handleEditProfileClick}
                             handleEditAvatarClick={handleEditAvatarClick}
                             handleAddPlaceClick={handleAddPlaceClick}

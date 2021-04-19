@@ -7,7 +7,7 @@ function Header(props) {
             <header className="header">
                 <img className="logo" src={logo} alt="around the U.S. logo" />
                 <div className="header__nav">
-                <p className="header_email">{props.userEmail}</p>               
+                <p className="header__email">{props.userEmail}</p>               
                 <Link to={props.link} className="header__link" onClick={props.handleSignOut}>
                     {props.text} 
                 </Link>
