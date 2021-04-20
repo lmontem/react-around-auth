@@ -18,11 +18,11 @@ function Register(props) {
   
 
     return (
-        <div className="register" onSubmit={handleSubmit}>
+        <div className="register" >
             <p className="login__welcome">
                 Sign up
                  </p>
-            <form className="login__form">
+            <form className="login__form" onSubmit={handleSubmit}>
                 <input className="login__input" placeholder="Email" name="email" type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} />
                 <input className="login__input" placeholder="Password" name="password" type="password" value={password} onChange={(e) => { setPassword(e.target.value) }} />
                 <button type="submit" className="login__btn">Sign up</button>

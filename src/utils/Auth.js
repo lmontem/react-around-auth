@@ -18,8 +18,7 @@ export const register = (email, password) => {
             }
         })
 
-        .catch(err => console.log(err))
-
+        
 }
 
 export const authorize = (email, password) => {
@@ -42,14 +41,7 @@ export const authorize = (email, password) => {
 
         })
 
-        .catch(res => {
-            if (res === 400) {
-                console.log('one of the fields was filled in in correctly')
-            }
-            if (res === 401) {
-                console.log('user email not found')
-            }
-        })
+       
 }
 
 export const checkToken = (token) => {
@@ -66,5 +58,5 @@ export const checkToken = (token) => {
             return res.json()
         })
         .then(data => data)
-        .catch(err => console.log(err))
+        
 }

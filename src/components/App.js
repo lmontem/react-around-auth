@@ -14,7 +14,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import InfoToolTip from './InfoToolTip';
-import * as auth from '../utils/Auth';
+import * as auth from '../utils/auth';
 import success from '../images/success.png';
 import fail from '../images/fail.png';
 
@@ -39,7 +39,7 @@ function App() {
 
     React.useEffect(() => {
         handleCheckToken();
-    });
+    }, []);
 
     //get initial cards and user info
     React.useEffect(() => {
@@ -147,7 +147,15 @@ function App() {
                 
                 history.push('/');
             })
-            .catch(err => { console.log(err) })
+            
+            .catch(res => {
+                if (res === 400) {
+                    console.log('one of the fields was filled in in correctly')
+                }
+                if (res === 401) {
+                    console.log('user email not found')
+                }
+            })
     }
 
     function handleRegister(email, password) {
@@ -169,6 +177,7 @@ function App() {
                     history.push('/signin')
                 }
             })
+            .catch(err => console.log(err))
     }
 
     function handleSignOut() {

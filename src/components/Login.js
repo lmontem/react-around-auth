@@ -23,12 +23,12 @@ function Login(props) {
 
 
     return (
-        <div className="login" onSubmit={handleSubmit}>
+        <div className="login" >
             <p className="login__welcome">
                 Log in
             </p>
            
-            <form className="login__form">
+            <form className="login__form" onSubmit={handleSubmit}>
                 <input className="login__input" required name="email" type="email" placeholder="Email" value={email} onChange={(e) => { setEmail(e.target.value) }}
                 />
 

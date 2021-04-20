@@ -15,7 +15,7 @@ class Api {
                 }
                 return Promise.reject(`Error: ${res.status}`)
             })
-            .catch(err => console.log('Error! ' + err))
+            
     }
 
 
@@ -29,7 +29,7 @@ class Api {
                 }
                 return Promise.reject(`Error: ${res.status}`)
             })
-            .catch(err => console.log('Error! ' + err))
+            
 
     }
     getAllInfo() {
@@ -51,7 +51,7 @@ class Api {
                 }
                 return Promise.reject(`Error: ${res.status}`)
             })
-            .catch(err => console.log('Error! ' + err))
+           
     }
     //POST https://around.nomoreparties.co/v1/groupId/cards
     addCard({ name, link }) {
@@ -69,7 +69,7 @@ class Api {
                 }
                 return Promise.reject(`Error: ${res.status}`)
             })
-            .catch(err => console.log('Error! ' + err))
+           
 
     }
     removeCard(cardId) {
@@ -84,7 +84,7 @@ class Api {
                 }
                 return Promise.reject(`Error: ${res.status}`)
             })
-            .catch(err => console.log('Error! ' + err))
+           
     }
     //PATCH https://around.nomoreparties.co/v1/groupId/users/me/avatar
     setAvatar({ avatar }) {
@@ -102,7 +102,7 @@ class Api {
                 }
                 return Promise.reject(`Error: ${res.status}`)
             })
-            .catch(err => console.log('Error! ' + err))
+            
 
     }
     // PUT https://around.nomoreparties.co/v1/groupId/cards/likes/cardId
@@ -122,7 +122,7 @@ class Api {
                 }
                 return Promise.reject(`Error: ${res.status}`)
             })
-            .catch(err => console.log('Error! ' + err))
+            
     }
 }
 
