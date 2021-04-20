@@ -57,6 +57,5 @@ export const checkToken = (token) => {
 
             return res.json()
         })
-        .then(data => data)
-        
+        .then(data => data)        
 }
